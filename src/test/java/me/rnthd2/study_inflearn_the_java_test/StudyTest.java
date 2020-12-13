@@ -4,8 +4,12 @@ import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class StudyTest {
+
+
 	@Test
+	@DisplayName("테스트를 받아랏 ヽ| ・∀・|ノ-=≡≡≡卍卍")
 	void create(){
 		Study study = new Study();
 		assertNotNull(study);
