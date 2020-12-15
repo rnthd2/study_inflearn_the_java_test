@@ -1,7 +1,8 @@
 package me.rnthd2.study_inflearn_the_java_test;
 
 import org.junit.jupiter.api.*;
-import org.mockito.internal.util.Supplier;
+import org.junit.jupiter.api.Assumptions.*;
+import org.junit.jupiter.api.condition.*;
 
 import java.time.Duration;
 
@@ -50,6 +51,27 @@ class StudyTest {
 //    @Tag("slow")
     void create1() {
         System.out.println("create1");
+    }
+
+    /**
+     * 조건에 따라 테스트 실행하는 방법
+     */
+    @Test
+    @EnabledOnOs({OS.MAC, OS.LINUX})
+    @DisabledOnOs({OS.WINDOWS, OS.OTHER})
+    @EnabledOnJre({JRE.JAVA_8, JRE.JAVA_11})
+    @DisabledOnJre({JRE.OTHER})
+    @EnabledIfEnvironmentVariable(named = "TEST_ENV", matches = "LOCAL")
+    void create2() {
+        String test_env = System.getenv("TEST_ENV");
+        System.out.println(test_env);
+        Assumptions.assumeTrue("LOCAL".equalsIgnoreCase(test_env));
+        Assumptions.assumingThat("LOCAL".equalsIgnoreCase(test_env), () -> {
+            System.out.println("local test success!");
+        });
+        Assumptions.assumingThat("DEV".equalsIgnoreCase(test_env), () -> {
+            System.out.println("dev test success!");
+        });
     }
 
     @BeforeAll
