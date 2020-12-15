@@ -27,6 +27,7 @@ class StudyTest {
      * 하지만 Thread local가 돌고 있는게 있다면 주의해서 작성해야 한다.
      * 스프링 트랜잭션과는 다른 별개의 쓰레드로 돌 수 있기 때문이다.
      */
+    @FastTest
     void create() {
         Study study = new Study(10);
 
@@ -44,8 +45,9 @@ class StudyTest {
         );
     }
 
-    @Test
+    @SlowTest
     @Disabled
+//    @Tag("slow")
     void create1() {
         System.out.println("create1");
     }
