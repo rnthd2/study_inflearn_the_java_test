@@ -74,6 +74,18 @@ class StudyTest {
         });
     }
 
+    @Test
+    @Tag("local")
+    void create3(){
+        System.out.println("local test success!");
+    }
+
+    @Test
+    @Tag("dev")
+    void create4(){
+        System.out.println("dev test success!");
+    }
+
     @BeforeAll
     static void beforeAll() {
         System.out.println("beforeAll");
