@@ -3,6 +3,8 @@ package me.rnthd2.study_inflearn_the_java_test;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Assumptions.*;
 import org.junit.jupiter.api.condition.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.Duration;
 
@@ -29,7 +31,8 @@ class StudyTest {
      * 스프링 트랜잭션과는 다른 별개의 쓰레드로 돌 수 있기 때문이다.
      */
     @FastTest
-    void create() {
+    @Disabled
+    void assertTest() {
         Study study = new Study(10);
 
         IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> new Study(-10));
@@ -49,7 +52,7 @@ class StudyTest {
     @SlowTest
     @Disabled
 //    @Tag("slow")
-    void create1() {
+    void customTagTest() {
         System.out.println("create1");
     }
 
@@ -57,12 +60,13 @@ class StudyTest {
      * 조건에 따라 테스트 실행하는 방법
      */
     @Test
+    @Disabled
     @EnabledOnOs({OS.MAC, OS.LINUX})
     @DisabledOnOs({OS.WINDOWS, OS.OTHER})
     @EnabledOnJre({JRE.JAVA_8, JRE.JAVA_11})
     @DisabledOnJre({JRE.OTHER})
     @EnabledIfEnvironmentVariable(named = "TEST_ENV", matches = "LOCAL")
-    void create2() {
+    void conditionTest() {
         String test_env = System.getenv("TEST_ENV");
         System.out.println(test_env);
         Assumptions.assumeTrue("LOCAL".equalsIgnoreCase(test_env));
@@ -74,16 +78,19 @@ class StudyTest {
         });
     }
 
-    @Test
-    @Tag("local")
-    void create3(){
-        System.out.println("local test success!");
+    @DisplayName("테스트 반복하기")
+    @RepeatedTest(value = 10, name = "{displayName} , {currentRepetition} of {totalRepetitions}" )
+    void repeatTest(RepetitionInfo repetitionInfo){
+        System.out.println("repeated test success!" +
+                " current : " + repetitionInfo.getCurrentRepetition() +
+                " of " + repetitionInfo.getTotalRepetitions());
     }
 
-    @Test
-    @Tag("dev")
-    void create4(){
-        System.out.println("dev test success!");
+    @DisplayName("테스트 반복하기")
+    @ParameterizedTest(name = "{index} {displayName} message is {0}")
+    @ValueSource(strings = {"아기가","웬일로","잘","자고있다."})
+    void repeatStringTest(String str){
+        System.out.println(str);
     }
 
     @BeforeAll
