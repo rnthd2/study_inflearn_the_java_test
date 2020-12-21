@@ -3,8 +3,16 @@ package me.rnthd2.study_inflearn_the_java_test;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Assumptions.*;
 import org.junit.jupiter.api.condition.*;
+import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.aggregator.AggregateWith;
+import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
+import org.junit.jupiter.params.aggregator.ArgumentsAggregationException;
+import org.junit.jupiter.params.aggregator.ArgumentsAggregator;
+import org.junit.jupiter.params.converter.ArgumentConversionException;
+import org.junit.jupiter.params.converter.ConvertWith;
+import org.junit.jupiter.params.converter.SimpleArgumentConverter;
+import org.junit.jupiter.params.provider.*;
 
 import java.time.Duration;
 
@@ -78,6 +86,7 @@ class StudyTest {
         });
     }
 
+    @Disabled
     @DisplayName("테스트 반복하기")
     @RepeatedTest(value = 10, name = "{displayName} , {currentRepetition} of {totalRepetitions}" )
     void repeatTest(RepetitionInfo repetitionInfo){
@@ -86,11 +95,55 @@ class StudyTest {
                 " of " + repetitionInfo.getTotalRepetitions());
     }
 
+    @Disabled
     @DisplayName("테스트 반복하기")
     @ParameterizedTest(name = "{index} {displayName} message is {0}")
     @ValueSource(strings = {"아기가","웬일로","잘","자고있다."})
+//    @EmptySource
+//    @NullSource
+    @NullAndEmptySource
     void repeatStringTest(String str){
         System.out.println(str);
+    }
+
+    @Disabled
+    @DisplayName("테스트 반복하기2_1")
+    @ParameterizedTest(name = "{index} {displayName} message is {0}")
+    @ValueSource(ints = {10,20,40})
+    void repeatStringTest2(@ConvertWith(StudyConverter.class) Study study) {
+        System.out.println(study.getLimit());
+    }
+
+    @Disabled
+    @DisplayName("테스트 반복하기2_2")
+    @ParameterizedTest(name = "{index} {displayName} message is {0}")
+    @CsvSource({"10, '자바 스터디'", "20, 스프링"})
+    void repeatStringTest3(Integer limit, String name) {
+        Study study = new Study(limit, name);
+        System.out.println(study);
+    }
+
+    @DisplayName("테스트 반복하기2_3")
+    @ParameterizedTest(name = "{index} {displayName} message is {0}")
+    @CsvSource({"10, '자바 스터디'", "20, 스프링"})
+    void repeatStringTest4(@AggregateWith(StudyAggregator.class) Study study) {
+        System.out.println(study);
+    }
+
+    static class StudyAggregator implements ArgumentsAggregator {
+
+        @Override
+        public Object aggregateArguments(ArgumentsAccessor argumentsAccessor, ParameterContext parameterContext) throws ArgumentsAggregationException {
+            return new Study(argumentsAccessor.getInteger(0), argumentsAccessor.getString(1));
+        }
+    }
+
+    static class StudyConverter extends SimpleArgumentConverter {
+        @Override
+        protected Object convert(Object o, Class<?> aClass) throws ArgumentConversionException {
+            assertEquals(Study.class, aClass, "Can only converter to study");
+            return new Study(Integer.parseInt(o.toString()));
+        }
     }
 
     @BeforeAll
