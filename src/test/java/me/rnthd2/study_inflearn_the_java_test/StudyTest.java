@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)//class마다 인스턴스를 생성
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class StudyTest {
 
     @Test
@@ -95,7 +96,6 @@ class StudyTest {
                 " of " + repetitionInfo.getTotalRepetitions());
     }
 
-    @Disabled
     @DisplayName("테스트 반복하기")
     @ParameterizedTest(name = "{index} {displayName} message is {0}")
     @ValueSource(strings = {"아기가","웬일로","잘","자고있다."})
@@ -106,7 +106,6 @@ class StudyTest {
         System.out.println(str);
     }
 
-    @Disabled
     @DisplayName("테스트 반복하기2_1")
     @ParameterizedTest(name = "{index} {displayName} message is {0}")
     @ValueSource(ints = {10,20,40})
@@ -114,7 +113,6 @@ class StudyTest {
         System.out.println(study.getLimit());
     }
 
-    @Disabled
     @DisplayName("테스트 반복하기2_2")
     @ParameterizedTest(name = "{index} {displayName} message is {0}")
     @CsvSource({"10, '자바 스터디'", "20, 스프링"})
@@ -123,7 +121,6 @@ class StudyTest {
         System.out.println(study);
     }
 
-    @Disabled
     @DisplayName("테스트 반복하기2_3")
     @ParameterizedTest(name = "{index} {displayName} message is {0}")
     @CsvSource({"10, '자바 스터디'", "20, 스프링"})
@@ -132,7 +129,6 @@ class StudyTest {
     }
 
     static class StudyAggregator implements ArgumentsAggregator {
-
         @Override
         public Object aggregateArguments(ArgumentsAccessor argumentsAccessor, ParameterContext parameterContext) throws ArgumentsAggregationException {
             return new Study(argumentsAccessor.getInteger(0), argumentsAccessor.getString(1));
@@ -149,14 +145,45 @@ class StudyTest {
 
 //test1과 test2는 다른 인스턴스로 서로의 의존성을 가지지 않고 다른 인스턴스다.
 //하지만, @TestInstace가 선언 되어 있는 경우 같은 인스턴스다
+    @Disabled
     @Test
+    @DisplayName("테스트 인스턴스 1")
     void testInstance1(){
         System.out.println(this);
     }
+
+    @Disabled
     @Test
+    @DisplayName("테스트 인스턴스 2")
     void testInstance2(){
         System.out.println(this);
     }
+
+    @Test
+    @DisplayName("테스트 순서 1")
+    @Order(1)
+    void testOrder1(){
+        System.out.println("1");
+    }
+    @Test
+    @DisplayName("테스트 순서 2")
+    @Order(2)
+    void testOrder2(){
+        System.out.println("2");
+    }
+    @Test
+    @DisplayName("테스트 순서 3")
+    @Order(3)
+    void testOrder3(){
+        System.out.println("3");
+    }
+    @Test
+    @DisplayName("테스트 순서 4")
+    @Order(4)
+    void testOrder4(){
+        System.out.println("4");
+    }
+
 
     @BeforeAll
 //    static @TestInstace가 선언 되어 있는 경우 BeforeAll은 static일 필요가 없다
