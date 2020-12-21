@@ -19,8 +19,8 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)//class마다 인스턴스를 생성
 class StudyTest {
-
 
     @Test
     @DisplayName("테스트를 받아랏 ヽ| ・∀・|ノ-=≡≡≡卍卍")
@@ -123,6 +123,7 @@ class StudyTest {
         System.out.println(study);
     }
 
+    @Disabled
     @DisplayName("테스트 반복하기2_3")
     @ParameterizedTest(name = "{index} {displayName} message is {0}")
     @CsvSource({"10, '자바 스터디'", "20, 스프링"})
@@ -146,13 +147,26 @@ class StudyTest {
         }
     }
 
+//test1과 test2는 다른 인스턴스로 서로의 의존성을 가지지 않고 다른 인스턴스다.
+//하지만, @TestInstace가 선언 되어 있는 경우 같은 인스턴스다
+    @Test
+    void testInstance1(){
+        System.out.println(this);
+    }
+    @Test
+    void testInstance2(){
+        System.out.println(this);
+    }
+
     @BeforeAll
-    static void beforeAll() {
+//    static @TestInstace가 선언 되어 있는 경우 BeforeAll은 static일 필요가 없다
+    void beforeAll() {
         System.out.println("beforeAll");
     }
 
     @AfterAll
-    static void afterAll() {
+//    static @TestInstace가 선언 되어 있는 경우 AfterAlld은 static일 필요가 없다
+    void afterAll() {
         System.out.println("afterAll");
     }
 
