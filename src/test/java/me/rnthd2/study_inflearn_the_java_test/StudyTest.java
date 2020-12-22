@@ -3,7 +3,9 @@ package me.rnthd2.study_inflearn_the_java_test;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Assumptions.*;
 import org.junit.jupiter.api.condition.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.AggregateWith;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
@@ -207,5 +209,15 @@ class StudyTest {
         System.out.println("afterEach");
     }
 
+
+//  class 위에 @ExtendWith(FindSlowTestExtension.class)을 설정하는게 아닌 아래와 같이 설정하면 생성자로 받아서 사용할 수 있다
+    @RegisterExtension
+    static FindSlowTestExtension findSlowTestExtension = new FindSlowTestExtension(1000L);
+
+    @Test
+//    @SlowTest
+    void ExtensionTest() throws InterruptedException {
+        Thread.sleep(1005L);
+    }
 
 }
