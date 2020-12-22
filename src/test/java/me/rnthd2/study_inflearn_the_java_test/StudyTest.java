@@ -19,7 +19,7 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)//class마다 인스턴스를 생성
+//@TestInstance(TestInstance.Lifecycle.PER_CLASS)//class마다 인스턴스를 생성
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class StudyTest {
 
@@ -145,14 +145,14 @@ class StudyTest {
 
 //test1과 test2는 다른 인스턴스로 서로의 의존성을 가지지 않고 다른 인스턴스다.
 //하지만, @TestInstace가 선언 되어 있는 경우 같은 인스턴스다
-    @Disabled
+//    @Disabled
     @Test
     @DisplayName("테스트 인스턴스 1")
     void testInstance1(){
         System.out.println(this);
     }
 
-    @Disabled
+//    @Disabled
     @Test
     @DisplayName("테스트 인스턴스 2")
     void testInstance2(){
